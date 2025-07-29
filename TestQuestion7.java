@@ -3,18 +3,18 @@
  * This file tests the rotateList function with various scenarios
  */
 
-// Node class (same as in Question7_RotateList.java)
-class ListNode {
-    String data;
-    ListNode next;
-    
-    ListNode(String data) {
-        this.data = data;
-        this.next = null;
-    }
-}
-
 public class TestQuestion7 {
+    
+    // Node class (same as in Question7_RotateList.java) - moved inside the class
+    static class ListNode {
+        String data;
+        ListNode next;
+        
+        ListNode(String data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
     
     // Copy the rotateList function from Question7_RotateList.java
     public static ListNode rotateList(ListNode head, int n) {

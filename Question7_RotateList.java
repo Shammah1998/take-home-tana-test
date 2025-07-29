@@ -7,19 +7,19 @@
  * Output: "ID_A05"->"ID_A06"->"ID_A01"->"ID_A02"->"ID_A03"->"ID_A04"->null
  */
 
-// Node class for the linked list
-class ListNode {
-    String data;
-    ListNode next;
-    
-    // Constructor
-    ListNode(String data) {
-        this.data = data;
-        this.next = null;
-    }
-}
-
 public class Question7_RotateList {
+    
+    // Node class for the linked list (moved inside the main class)
+    static class ListNode {
+        String data;
+        ListNode next;
+        
+        // Constructor
+        ListNode(String data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
     
     /**
      * Rotates a linked list by n positions to the right
