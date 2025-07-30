@@ -9,6 +9,7 @@
 
 public class Question7_RotateList {
     
+    // ===== NODE CLASS DEFINITION =====
     // Node class for the linked list (moved inside the main class)
     // Kept it simple - didn't need a separate file for this small project
     static class ListNode {
@@ -23,6 +24,7 @@ public class Question7_RotateList {
     }
     
     /**
+     * ===== MAIN ROTATION FUNCTION =====
      * Rotates a linked list by n positions to the right
      * 
      * This was a fun problem! The key insight was understanding that rotating by
@@ -34,14 +36,17 @@ public class Question7_RotateList {
      * @return The new head of the rotated list
      */
     public static ListNode rotateList(ListNode head, int n) {
+        // ===== EDGE CASE HANDLING =====
         // Handle edge cases - learned this is important after my first attempt failed
         if (head == null || head.next == null || n == 0) {
             return head;
         }
         
+        // ===== STEP 1: CALCULATE LIST LENGTH =====
         // Count the number of nodes in the list
         int listLength = countNodes(head);
         
+        // ===== STEP 2: NORMALIZE ROTATION AMOUNT =====
         // If n is larger than list length, I can reduce it
         // because rotating by list length brings me back to original position
         // This was the key insight that made the solution work for any n
@@ -52,6 +57,7 @@ public class Question7_RotateList {
             return head;
         }
         
+        // ===== STEP 3: FIND NEW TAIL POSITION =====
         // Find the new tail (the node that will become the last node)
         // I need to go (listLength - n) steps from the beginning
         int stepsToNewTail = listLength - n;
@@ -62,10 +68,12 @@ public class Question7_RotateList {
             current = current.next;
         }
         
+        // ===== STEP 4: BREAK AND RECONNECT LIST =====
         // current now points to the new tail
         ListNode newHead = current.next;  // This will be the new head
         current.next = null;              // Break the list at new tail
         
+        // ===== STEP 5: CONNECT ORIGINAL TAIL TO ORIGINAL HEAD =====
         // Find the original tail and connect it to the original head
         // This was the trickiest part to get right - had to think about the pointer manipulation
         ListNode originalTail = newHead;
@@ -78,6 +86,7 @@ public class Question7_RotateList {
     }
     
     /**
+     * ===== UTILITY FUNCTION: COUNT NODES =====
      * Counts the number of nodes in the linked list
      * 
      * Simple utility method - could have done this inline but it's cleaner this way.
@@ -98,6 +107,7 @@ public class Question7_RotateList {
     }
     
     /**
+     * ===== UTILITY FUNCTION: CREATE LIST =====
      * Creates a linked list from an array of strings
      * 
      * Helper method to make testing easier. Could have used a more generic approach
@@ -123,6 +133,7 @@ public class Question7_RotateList {
     }
     
     /**
+     * ===== UTILITY FUNCTION: PRINT LIST =====
      * Prints the linked list in a readable format
      * 
      * Simple utility for debugging and testing. Could have used a more sophisticated
@@ -143,10 +154,12 @@ public class Question7_RotateList {
         System.out.println(" -> null");
     }
     
+    // ===== TEST METHOD - COMPREHENSIVE TESTING =====
     // Test method to demonstrate the function
     public static void main(String[] args) {
         System.out.println("=== Testing Question 7: Rotate List ===\n");
         
+        // ===== ORIGINAL TEST CASE FROM PROBLEM =====
         // Test Case 1: Original example from the problem
         System.out.println("Test Case 1: Original Example");
         String[] values1 = {"ID_A01", "ID_A02", "ID_A03", "ID_A04", "ID_A05", "ID_A06"};
@@ -163,6 +176,7 @@ public class Question7_RotateList {
         printList(rotated1);
         System.out.println();
         
+        // ===== EDGE CASE: ROTATE BY MORE THAN LIST LENGTH =====
         // Test Case 2: Rotate by more than list length
         System.out.println("Test Case 2: Rotate by more than list length");
         String[] values2 = {"A", "B", "C"};
@@ -179,6 +193,7 @@ public class Question7_RotateList {
         printList(rotated2);
         System.out.println();
         
+        // ===== EDGE CASE: ROTATE BY LIST LENGTH =====
         // Test Case 3: Rotate by list length (should return original)
         System.out.println("Test Case 3: Rotate by list length");
         String[] values3 = {"X", "Y", "Z"};
@@ -195,6 +210,7 @@ public class Question7_RotateList {
         printList(rotated3);
         System.out.println();
         
+        // ===== EDGE CASE: SINGLE NODE =====
         // Test Case 4: Single node list - added this after finding a bug in my testing
         System.out.println("Test Case 4: Single node list");
         String[] values4 = {"Single"};
@@ -211,6 +227,7 @@ public class Question7_RotateList {
         printList(rotated4);
         System.out.println();
         
+        // ===== EDGE CASE: EMPTY LIST =====
         // Test Case 5: Empty list - this caught a null pointer exception in early version
         System.out.println("Test Case 5: Empty list");
         ListNode list5 = null;

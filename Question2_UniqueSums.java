@@ -23,28 +23,34 @@ public class Question2_UniqueSums {
      * @return Number of unique ways to sum to the target
      */
     public static int findUniqueSums(int result, int[] numbers) {
+        // ===== EDGE CASE HANDLING =====
         // Handle edge cases - learned this is crucial after my first attempt crashed
         if (numbers == null || numbers.length == 0) {
             return 0;
         }
         
+        // ===== KEY INSIGHT: SORT TO HANDLE DUPLICATES =====
         // Step 1: Sort the array to help with duplicate detection
         // This ensures that combinations like [1,2,3,4] and [4,3,2,1] are treated as the same
         // Tried using a custom comparator first, but sorting was much simpler
         Arrays.sort(numbers);
         
+        // ===== SETUP: STORE UNIQUE COMBINATIONS =====
         // Step 2: Use a Set to store unique combinations
         // I'll store combinations as sorted lists to avoid duplicates
         Set<List<Integer>> uniqueCombinations = new HashSet<>();
         
+        // ===== RECURSIVE BACKTRACKING CALL =====
         // Step 3: Use backtracking to find all valid combinations
         findCombinations(numbers, result, 0, new ArrayList<>(), 0, uniqueCombinations);
         
+        // ===== RETURN RESULT =====
         // Step 4: Return the count of unique combinations
         return uniqueCombinations.size();
     }
     
     /**
+     * ===== RECURSIVE HELPER: BACKTRACKING LOGIC =====
      * Recursive helper method to find all valid combinations that sum to target
      * 
      * Originally tried to do this with a single method, but it got too complex.
@@ -61,6 +67,7 @@ public class Question2_UniqueSums {
                                        List<Integer> currentCombination, int currentSum,
                                        Set<List<Integer>> uniqueCombinations) {
         
+        // ===== BASE CASE 1: FOUND A VALID COMBINATION =====
         // Base case 1: If current sum equals target, I found a valid combination
         if (currentSum == target) {
             // Create a new sorted list to avoid reference issues
@@ -71,21 +78,25 @@ public class Question2_UniqueSums {
             return;
         }
         
+        // ===== BASE CASE 2: SUM EXCEEDS TARGET =====
         // Base case 2: If current sum exceeds target, backtrack
         if (currentSum > target) {
             return;
         }
         
+        // ===== BASE CASE 3: PROCESSED ALL NUMBERS =====
         // Base case 3: If I've processed all numbers, backtrack
         if (index >= numbers.length) {
             return;
         }
         
+        // ===== RECURSIVE CASE: INCLUDE CURRENT NUMBER =====
         // Recursive case: Try including the current number
         currentCombination.add(numbers[index]);
         findCombinations(numbers, target, index + 1, currentCombination, 
                         currentSum + numbers[index], uniqueCombinations);
         
+        // ===== BACKTRACK: EXCLUDE CURRENT NUMBER =====
         // Backtrack: Remove the current number and try without it
         // This was the trickiest part to get right - had to remember to remove the last element
         currentCombination.remove(currentCombination.size() - 1);
@@ -94,6 +105,7 @@ public class Question2_UniqueSums {
     }
     
     /**
+     * ===== ALTERNATIVE APPROACH: DYNAMIC PROGRAMMING =====
      * Alternative approach using dynamic programming for better performance
      * This approach is more efficient for larger arrays and smaller target values
      * 
@@ -101,11 +113,13 @@ public class Question2_UniqueSums {
      * DP is definitely more complex to understand but much faster in practice.
      */
     public static int findUniqueSumsDP(int result, int[] numbers) {
+        // ===== EDGE CASE HANDLING =====
         // Handle edge cases
         if (numbers == null || numbers.length == 0) {
             return 0;
         }
         
+        // ===== SETUP: SORT AND CREATE DP TABLE =====
         // Step 1: Sort the array
         Arrays.sort(numbers);
         
@@ -115,11 +129,13 @@ public class Question2_UniqueSums {
         int n = numbers.length;
         int[][] dp = new int[n + 1][result + 1];
         
+        // ===== INITIALIZATION: BASE CASE =====
         // Initialize: one way to sum to 0 (empty subset)
         for (int i = 0; i <= n; i++) {
             dp[i][0] = 1;
         }
         
+        // ===== FILL DP TABLE: CORE LOGIC =====
         // Fill the DP table
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= result; j++) {
@@ -137,9 +153,11 @@ public class Question2_UniqueSums {
     }
     
     /**
+     * ===== TEST METHOD - COMPREHENSIVE TESTING =====
      * Test method to demonstrate the solution
      */
     public static void main(String[] args) {
+        // ===== ORIGINAL TEST CASES FROM PROBLEM =====
         // Test case 1 from the question
         int result1 = 10;
         int[] numbers1 = {1, 2, 3, 4, 5};
@@ -158,6 +176,7 @@ public class Question2_UniqueSums {
         System.out.println("DP approach: " + findUniqueSumsDP(result2, numbers2));
         System.out.println();
         
+        // ===== EDGE CASE TESTING =====
         // Additional test cases - added these after finding edge cases that broke my first version
         int result3 = 5;
         int[] numbers3 = {1, 2, 3};

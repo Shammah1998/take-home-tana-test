@@ -29,6 +29,7 @@ public class Question3_MakeArrayZero {
      * @return 1 if possible to make all elements zero (except first), 0 otherwise
      */
     public static int canMakeArrayZero(int[] arr) {
+        // ===== EDGE CASE HANDLING =====
         // Handle edge cases - learned this is important after my first attempt failed
         if (arr == null || arr.length == 0) {
             return 0;
@@ -39,17 +40,20 @@ public class Question3_MakeArrayZero {
             return 1;
         }
         
+        // ===== CRITICAL CHECK: FIRST ELEMENT MUST BE POSITIVE =====
         // Step 1: Check if the first element is positive (required for valid operations)
         if (arr[0] <= 0) {
             return 0; // First element must be positive for valid operations
         }
         
+        // ===== MATHEMATICAL ANALYSIS =====
         // Step 2: Mathematical analysis
         // For the array to be reducible to [a[0], 0, 0, ..., 0]:
         // Each element a[i] must be reducible to 0 through operations
         // The key insight is that each operation reduces a[i] by a[i-1]
         // So I need to check if each element can be reduced to 0
         
+        // ===== CHECK EACH ELEMENT CAN BE REDUCED TO ZERO =====
         // Step 3: Check each element (except first) can be reduced to 0
         for (int i = 1; i < arr.length; i++) {
             if (arr[i] > 0) {
@@ -69,12 +73,14 @@ public class Question3_MakeArrayZero {
     }
     
     /**
+     * ===== HELPER FUNCTION: MATHEMATICAL VALIDATION =====
      * Helper method to check if element at index i can be reduced to 0
      * 
      * Originally tried to do this with complex math, but the simple approach worked better.
      * Sometimes the obvious solution is the right one!
      */
     private static boolean canReduceToZero(int[] arr, int index) {
+        // ===== KEY INSIGHT: ELEMENT MUST BE >= PREVIOUS ELEMENT =====
         // For element at index i to be reducible to 0:
         // It must be possible to express a[i] as a combination of previous elements
         // through the decrement operations
@@ -86,6 +92,7 @@ public class Question3_MakeArrayZero {
         // - a[1]=2 can be reduced: 2-1=1, then 1-1=0
         // - a[2]=3 can be reduced: 3-2=1, then 1-1=0
         
+        // ===== VALIDATION: CHECK MONOTONIC INCREASING SEQUENCE =====
         // The condition is that each element must be >= the previous element
         // for the operations to be possible
         for (int i = 1; i <= index; i++) {
@@ -98,6 +105,7 @@ public class Question3_MakeArrayZero {
     }
     
     /**
+     * ===== ALTERNATIVE APPROACH: SIMULATION =====
      * Alternative approach using simulation for smaller arrays
      * This approach actually simulates the operations to verify the result
      * 
@@ -105,6 +113,7 @@ public class Question3_MakeArrayZero {
      * Sometimes it's good to have a backup approach to verify your logic.
      */
     public static int canMakeArrayZeroSimulation(int[] arr) {
+        // ===== EDGE CASE HANDLING =====
         // Handle edge cases
         if (arr == null || arr.length == 0) {
             return 0;
@@ -114,14 +123,17 @@ public class Question3_MakeArrayZero {
             return 1;
         }
         
+        // ===== CHECK FIRST ELEMENT =====
         // Step 1: Check if first element is positive
         if (arr[0] <= 0) {
             return 0;
         }
         
+        // ===== SETUP: CREATE COPY FOR SIMULATION =====
         // Step 2: Create a copy of the array to simulate operations
         int[] currentArray = arr.clone();
         
+        // ===== SIMULATION LOOP: APPLY OPERATIONS =====
         // Step 3: Try to reduce all elements (except first) to zero
         // I'll perform operations in a systematic way
         boolean changed = true;
@@ -132,6 +144,7 @@ public class Question3_MakeArrayZero {
             changed = false;
             iterations++;
             
+            // ===== APPLY DECREMENT OPERATIONS =====
             // Try to reduce each element (except first) by performing operations
             for (int i = 1; i < currentArray.length; i++) {
                 if (currentArray[i] > 0 && currentArray[i-1] > 0) {
@@ -145,6 +158,7 @@ public class Question3_MakeArrayZero {
             }
         }
         
+        // ===== CHECK RESULT: ALL ELEMENTS ZERO? =====
         // Step 4: Check if all elements (except first) are zero
         for (int i = 1; i < currentArray.length; i++) {
             if (currentArray[i] != 0) {
@@ -156,9 +170,11 @@ public class Question3_MakeArrayZero {
     }
     
     /**
+     * ===== TEST METHOD - COMPREHENSIVE TESTING =====
      * Test method to demonstrate the solution
      */
     public static void main(String[] args) {
+        // ===== ORIGINAL TEST CASE FROM PROBLEM =====
         // Test case from the question
         int[] test1 = {1, 2, 3};
         System.out.println("Test 1: " + Arrays.toString(test1));
@@ -167,6 +183,7 @@ public class Question3_MakeArrayZero {
         System.out.println("Simulation approach: " + canMakeArrayZeroSimulation(test1));
         System.out.println();
         
+        // ===== ADDITIONAL TEST CASES =====
         // Additional test cases - added these after the first version failed some edge cases
         int[] test2 = {2, 4, 6};
         System.out.println("Test 2: " + Arrays.toString(test2));
@@ -203,6 +220,7 @@ public class Question3_MakeArrayZero {
         System.out.println("Simulation approach: " + canMakeArrayZeroSimulation(test6));
         System.out.println();
         
+        // ===== EDGE CASE TESTING =====
         // Edge cases - these caught bugs in my early versions
         int[] test7 = {1};
         System.out.println("Test 7: " + Arrays.toString(test7));

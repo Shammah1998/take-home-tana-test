@@ -22,16 +22,19 @@ public class Question6_ThreeMostCommonStrings {
      * @return Array of the three most common strings in ascending alphabetical order
      */
     public static String[] findThreeMostCommonStrings(String sentence) {
+        // ===== EDGE CASE HANDLING =====
         // Handle edge cases - learned this is important after my first attempt failed
         if (sentence == null || sentence.trim().isEmpty()) {
             return new String[0];
         }
         
+        // ===== STEP 1: PARSE AND CLEAN WORDS =====
         // Step 1: Split the sentence into words and clean them
         // Remove extra spaces and split by whitespace
         // Tried using StringTokenizer first, but split() is more modern and flexible
         String[] words = sentence.trim().split("\\s+");
         
+        // ===== STEP 2: COUNT WORD FREQUENCIES =====
         // Step 2: Count the frequency of each word using HashMap
         Map<String, Integer> wordFrequency = new HashMap<>();
         
@@ -44,9 +47,11 @@ public class Question6_ThreeMostCommonStrings {
             }
         }
         
+        // ===== STEP 3: CREATE SORTABLE LIST =====
         // Step 3: Create a list of word-frequency pairs for sorting
         List<Map.Entry<String, Integer>> wordList = new ArrayList<>(wordFrequency.entrySet());
         
+        // ===== STEP 4: CUSTOM SORTING LOGIC =====
         // Step 4: Sort by frequency (descending) and then alphabetically (ascending)
         // This was the trickiest part - had to think about the comparator logic
         Collections.sort(wordList, new Comparator<Map.Entry<String, Integer>>() {
@@ -62,6 +67,7 @@ public class Question6_ThreeMostCommonStrings {
             }
         });
         
+        // ===== STEP 5: EXTRACT TOP 3 RESULTS =====
         // Step 5: Extract the top 3 most common words
         int resultSize = Math.min(3, wordList.size());
         String[] result = new String[resultSize];
@@ -74,17 +80,20 @@ public class Question6_ThreeMostCommonStrings {
     }
     
     /**
+     * ===== OPTIMIZED APPROACH: PRIORITY QUEUE =====
      * Alternative approach using PriorityQueue for better performance with large datasets
      * 
      * Added this after learning about PriorityQueue - it's more efficient for getting
      * top k elements without sorting the entire list. Good to know for future problems!
      */
     public static String[] findThreeMostCommonStringsOptimized(String sentence) {
+        // ===== EDGE CASE HANDLING =====
         // Handle edge cases
         if (sentence == null || sentence.trim().isEmpty()) {
             return new String[0];
         }
         
+        // ===== STEP 1: PARSE AND COUNT WORDS =====
         // Step 1: Split and count words
         String[] words = sentence.trim().split("\\s+");
         Map<String, Integer> wordFrequency = new HashMap<>();
@@ -96,6 +105,7 @@ public class Question6_ThreeMostCommonStrings {
             }
         }
         
+        // ===== STEP 2: SETUP PRIORITY QUEUE =====
         // Step 2: Use PriorityQueue to get top 3 most frequent words
         // Custom comparator: frequency descending, then alphabetical ascending
         // PriorityQueue is more efficient for this use case
@@ -106,9 +116,11 @@ public class Question6_ThreeMostCommonStrings {
             }
         );
         
+        // ===== STEP 3: ADD ALL ENTRIES TO PRIORITY QUEUE =====
         // Add all entries to priority queue
         pq.addAll(wordFrequency.entrySet());
         
+        // ===== STEP 4: EXTRACT TOP 3 RESULTS =====
         // Step 3: Extract top 3 results
         int resultSize = Math.min(3, pq.size());
         String[] result = new String[resultSize];
@@ -121,9 +133,11 @@ public class Question6_ThreeMostCommonStrings {
     }
     
     /**
+     * ===== TEST METHOD - COMPREHENSIVE TESTING =====
      * Test method to demonstrate the solution
      */
     public static void main(String[] args) {
+        // ===== ORIGINAL TEST CASE FROM PROBLEM =====
         // Test case from the question
         String test1 = "hi there care to discuss algorithm basis or how to solve algorithm or";
         System.out.println("Test 1 Input: \"" + test1 + "\"");
@@ -132,6 +146,7 @@ public class Question6_ThreeMostCommonStrings {
         System.out.println("Test 1 (optimized): " + Arrays.toString(findThreeMostCommonStringsOptimized(test1)));
         System.out.println();
         
+        // ===== ADDITIONAL TEST CASES =====
         // Additional test cases - added these after the first version failed some edge cases
         String test2 = "the quick brown fox jumps over the lazy dog the fox";
         System.out.println("Test 2 Input: \"" + test2 + "\"");
@@ -157,6 +172,7 @@ public class Question6_ThreeMostCommonStrings {
         System.out.println("Test 5 Output: " + Arrays.toString(result5)); // Expected: []
         System.out.println();
         
+        // ===== EDGE CASE TESTING =====
         // Test with case sensitivity and special characters - added this after finding a bug in my testing
         String test6 = "Algorithm ALGORITHM algorithm or OR to TO";
         System.out.println("Test 6 Input: \"" + test6 + "\"");
