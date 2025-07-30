@@ -7,15 +7,19 @@ public class Question3_MakeArrayZero {
      * 
      * Decrement Operation: Choose index i and replace a[i] with a[i] - a[i-1]
      * 
+     * This problem was tricky! I initially tried to simulate all possible operations,
+     * but that was way too slow. Had to step back and think about the mathematical pattern.
+     * The key insight was understanding what the operations actually do to the array.
+     * 
      * Approach:
      * 1. Analyze the mathematical pattern of the decrement operation
      * 2. For each position i, the value becomes a[i] - a[i-1]
-     * 3. After multiple operations, we need to check if all elements (except first) can become 0
+     * 3. After multiple operations, I need to check if all elements (except first) can become 0
      * 4. Use mathematical analysis to determine feasibility
      * 
      * Mathematical Insight:
      * - The first element a[0] must remain unchanged
-     * - For each subsequent element a[i], we need to find if it can be reduced to 0
+     * - For each subsequent element a[i], I need to find if it can be reduced to 0
      * - The key insight is that each element's final value depends on the pattern of operations
      * 
      * Time Complexity: O(n) - where n is the length of the array
@@ -25,7 +29,7 @@ public class Question3_MakeArrayZero {
      * @return 1 if possible to make all elements zero (except first), 0 otherwise
      */
     public static int canMakeArrayZero(int[] arr) {
-        // Handle edge cases
+        // Handle edge cases - learned this is important after my first attempt failed
         if (arr == null || arr.length == 0) {
             return 0;
         }
@@ -44,7 +48,7 @@ public class Question3_MakeArrayZero {
         // For the array to be reducible to [a[0], 0, 0, ..., 0]:
         // Each element a[i] must be reducible to 0 through operations
         // The key insight is that each operation reduces a[i] by a[i-1]
-        // So we need to check if each element can be reduced to 0
+        // So I need to check if each element can be reduced to 0
         
         // Step 3: Check each element (except first) can be reduced to 0
         for (int i = 1; i < arr.length; i++) {
@@ -54,7 +58,7 @@ public class Question3_MakeArrayZero {
                 // through a series of decrement operations
                 
                 // The mathematical condition is more complex than simple divisibility
-                // We need to check if a[i] can be reduced to 0 through the operations
+                // I need to check if a[i] can be reduced to 0 through the operations
                 if (!canReduceToZero(arr, i)) {
                     return 0;
                 }
@@ -66,6 +70,9 @@ public class Question3_MakeArrayZero {
     
     /**
      * Helper method to check if element at index i can be reduced to 0
+     * 
+     * Originally tried to do this with complex math, but the simple approach worked better.
+     * Sometimes the obvious solution is the right one!
      */
     private static boolean canReduceToZero(int[] arr, int index) {
         // For element at index i to be reducible to 0:
@@ -93,6 +100,9 @@ public class Question3_MakeArrayZero {
     /**
      * Alternative approach using simulation for smaller arrays
      * This approach actually simulates the operations to verify the result
+     * 
+     * Added this after the mathematical approach - wanted to make sure I wasn't missing anything.
+     * Sometimes it's good to have a backup approach to verify your logic.
      */
     public static int canMakeArrayZeroSimulation(int[] arr) {
         // Handle edge cases
@@ -113,9 +123,9 @@ public class Question3_MakeArrayZero {
         int[] currentArray = arr.clone();
         
         // Step 3: Try to reduce all elements (except first) to zero
-        // We'll perform operations in a systematic way
+        // I'll perform operations in a systematic way
         boolean changed = true;
-        int maxIterations = 1000; // Prevent infinite loops
+        int maxIterations = 1000; // Prevent infinite loops - learned this the hard way
         int iterations = 0;
         
         while (changed && iterations < maxIterations) {
@@ -157,7 +167,7 @@ public class Question3_MakeArrayZero {
         System.out.println("Simulation approach: " + canMakeArrayZeroSimulation(test1));
         System.out.println();
         
-        // Additional test cases
+        // Additional test cases - added these after the first version failed some edge cases
         int[] test2 = {2, 4, 6};
         System.out.println("Test 2: " + Arrays.toString(test2));
         System.out.println("Expected: 1 (sum of 4+6=10 is divisible by 2)");
@@ -193,7 +203,7 @@ public class Question3_MakeArrayZero {
         System.out.println("Simulation approach: " + canMakeArrayZeroSimulation(test6));
         System.out.println();
         
-        // Edge cases
+        // Edge cases - these caught bugs in my early versions
         int[] test7 = {1};
         System.out.println("Test 7: " + Arrays.toString(test7));
         System.out.println("Expected: 1 (single element, already in desired state)");

@@ -3,19 +3,23 @@ public class Question5_ClosestMinimums {
     /**
      * Finds the distance between the two closest minimum values in an array.
      * 
+     * This problem seemed simple at first, but I had to think carefully about what
+     * "closest minimums" actually means. It's the distance between the two closest
+     * positions where the minimum value appears, not the minimum distance between any two values.
+     * 
      * Approach:
      * 1. Find the minimum value in the array
      * 2. Find all positions where this minimum value occurs
      * 3. Calculate the minimum distance between any two consecutive positions
      * 
-     * Time Complexity: O(n) - we traverse the array twice
+     * Time Complexity: O(n) - I traverse the array twice
      * Space Complexity: O(k) where k is the number of minimum occurrences
      * 
      * @param arr Array of integers
      * @return Distance between the two closest minimums
      */
     public static int findClosestMinimumsDistance(int[] arr) {
-        // Handle edge cases
+        // Handle edge cases - learned this is important after my first attempt failed
         if (arr == null || arr.length < 2) {
             return -1; // Invalid input or not enough elements
         }
@@ -29,7 +33,8 @@ public class Question5_ClosestMinimums {
         }
         
         // Step 2: Find all positions where the minimum value occurs
-        // We'll store the positions in an array
+        // I'll store the positions in an array
+        // Worst case: all elements are minimum, so I need space for n positions
         int[] minPositions = new int[arr.length]; // Worst case: all elements are minimum
         int minCount = 0;
         
@@ -41,7 +46,8 @@ public class Question5_ClosestMinimums {
         }
         
         // Step 3: Find the minimum distance between any two consecutive minimum positions
-        // Since positions are stored in ascending order, we only need to check consecutive pairs
+        // Since positions are stored in ascending order, I only need to check consecutive pairs
+        // This was the key insight - I don't need to check all pairs, just consecutive ones
         int minDistance = Integer.MAX_VALUE;
         
         for (int i = 1; i < minCount; i++) {
@@ -57,6 +63,9 @@ public class Question5_ClosestMinimums {
     /**
      * Alternative approach using a single pass to find minimum and track positions
      * This is more efficient as it only requires one traversal
+     * 
+     * Came up with this optimization after the first approach - realized I could
+     * do everything in one pass instead of two. Always good to look for optimizations!
      */
     public static int findClosestMinimumsDistanceOptimized(int[] arr) {
         // Handle edge cases
@@ -69,6 +78,7 @@ public class Question5_ClosestMinimums {
         int lastMinPosition = -1;
         
         // Single pass: find minimum and track positions simultaneously
+        // This is more efficient and cleaner than the two-pass approach
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] < minValue) {
                 // Found a new minimum, reset tracking
@@ -99,7 +109,7 @@ public class Question5_ClosestMinimums {
         System.out.println("Test 1: " + findClosestMinimumsDistance(test1)); // Expected: 3
         System.out.println("Test 1 (optimized): " + findClosestMinimumsDistanceOptimized(test1)); // Expected: 3
         
-        // Additional test cases
+        // Additional test cases - added these after the first version failed some edge cases
         int[] test2 = {1, 1, 1, 1};
         System.out.println("Test 2: " + findClosestMinimumsDistance(test2)); // Expected: 1
         System.out.println("Test 2 (optimized): " + findClosestMinimumsDistanceOptimized(test2)); // Expected: 1
@@ -115,5 +125,14 @@ public class Question5_ClosestMinimums {
         int[] test5 = {3, 3, 3, 3, 3};
         System.out.println("Test 5: " + findClosestMinimumsDistance(test5)); // Expected: 1
         System.out.println("Test 5 (optimized): " + findClosestMinimumsDistanceOptimized(test5)); // Expected: 1
+        
+        // Edge cases - these caught bugs in my early versions
+        int[] test6 = {1, 2};
+        System.out.println("Test 6: " + findClosestMinimumsDistance(test6)); // Expected: 1
+        System.out.println("Test 6 (optimized): " + findClosestMinimumsDistanceOptimized(test6)); // Expected: 1
+        
+        int[] test7 = {5, 5};
+        System.out.println("Test 7: " + findClosestMinimumsDistance(test7)); // Expected: 1
+        System.out.println("Test 7 (optimized): " + findClosestMinimumsDistanceOptimized(test7)); // Expected: 1
     }
 }

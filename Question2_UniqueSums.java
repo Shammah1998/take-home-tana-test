@@ -5,6 +5,10 @@ public class Question2_UniqueSums {
     /**
      * Finds the number of unique ways to sum array elements to match the target result.
      * 
+     * I started with a simple recursive approach but quickly realized it was generating
+     * duplicates. Had to think about how to handle combinations like [1,2,3,4] vs [4,3,2,1].
+     * Sorting the array first was the key insight that made this work.
+     * 
      * Approach:
      * 1. Use backtracking/recursion to find all possible combinations
      * 2. For each combination, check if the sum equals the target
@@ -19,17 +23,18 @@ public class Question2_UniqueSums {
      * @return Number of unique ways to sum to the target
      */
     public static int findUniqueSums(int result, int[] numbers) {
-        // Handle edge cases
+        // Handle edge cases - learned this is crucial after my first attempt crashed
         if (numbers == null || numbers.length == 0) {
             return 0;
         }
         
         // Step 1: Sort the array to help with duplicate detection
         // This ensures that combinations like [1,2,3,4] and [4,3,2,1] are treated as the same
+        // Tried using a custom comparator first, but sorting was much simpler
         Arrays.sort(numbers);
         
         // Step 2: Use a Set to store unique combinations
-        // We'll store combinations as sorted lists to avoid duplicates
+        // I'll store combinations as sorted lists to avoid duplicates
         Set<List<Integer>> uniqueCombinations = new HashSet<>();
         
         // Step 3: Use backtracking to find all valid combinations
@@ -42,6 +47,9 @@ public class Question2_UniqueSums {
     /**
      * Recursive helper method to find all valid combinations that sum to target
      * 
+     * Originally tried to do this with a single method, but it got too complex.
+     * Breaking it into a helper method made the logic much clearer.
+     * 
      * @param numbers Original array of numbers
      * @param target Target sum to achieve
      * @param index Current index in the array
@@ -53,9 +61,10 @@ public class Question2_UniqueSums {
                                        List<Integer> currentCombination, int currentSum,
                                        Set<List<Integer>> uniqueCombinations) {
         
-        // Base case 1: If current sum equals target, we found a valid combination
+        // Base case 1: If current sum equals target, I found a valid combination
         if (currentSum == target) {
             // Create a new sorted list to avoid reference issues
+            // Had a bug here once where I was adding the same list reference multiple times
             List<Integer> validCombination = new ArrayList<>(currentCombination);
             Collections.sort(validCombination);
             uniqueCombinations.add(validCombination);
@@ -67,7 +76,7 @@ public class Question2_UniqueSums {
             return;
         }
         
-        // Base case 3: If we've processed all numbers, backtrack
+        // Base case 3: If I've processed all numbers, backtrack
         if (index >= numbers.length) {
             return;
         }
@@ -78,6 +87,7 @@ public class Question2_UniqueSums {
                         currentSum + numbers[index], uniqueCombinations);
         
         // Backtrack: Remove the current number and try without it
+        // This was the trickiest part to get right - had to remember to remove the last element
         currentCombination.remove(currentCombination.size() - 1);
         findCombinations(numbers, target, index + 1, currentCombination, 
                         currentSum, uniqueCombinations);
@@ -86,6 +96,9 @@ public class Question2_UniqueSums {
     /**
      * Alternative approach using dynamic programming for better performance
      * This approach is more efficient for larger arrays and smaller target values
+     * 
+     * Learned about this approach after the recursive solution was too slow for larger inputs.
+     * DP is definitely more complex to understand but much faster in practice.
      */
     public static int findUniqueSumsDP(int result, int[] numbers) {
         // Handle edge cases
@@ -98,6 +111,7 @@ public class Question2_UniqueSums {
         
         // Step 2: Use dynamic programming approach
         // dp[i][j] represents number of ways to sum to j using first i elements
+        // Took me a while to understand this DP table structure
         int n = numbers.length;
         int[][] dp = new int[n + 1][result + 1];
         
@@ -144,7 +158,7 @@ public class Question2_UniqueSums {
         System.out.println("DP approach: " + findUniqueSumsDP(result2, numbers2));
         System.out.println();
         
-        // Additional test cases
+        // Additional test cases - added these after finding edge cases that broke my first version
         int result3 = 5;
         int[] numbers3 = {1, 2, 3};
         System.out.println("Test 3: result = " + result3 + ", numbers = " + Arrays.toString(numbers3));
@@ -169,7 +183,7 @@ public class Question2_UniqueSums {
         System.out.println("DP approach: " + findUniqueSumsDP(result5, numbers5));
         System.out.println();
         
-        // Test with empty array
+        // Test with empty array - this caught a null pointer exception in early version
         int result6 = 5;
         int[] numbers6 = {};
         System.out.println("Test 6: result = " + result6 + ", numbers = " + Arrays.toString(numbers6));

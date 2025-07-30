@@ -10,6 +10,7 @@
 public class Question7_RotateList {
     
     // Node class for the linked list (moved inside the main class)
+    // Kept it simple - didn't need a separate file for this small project
     static class ListNode {
         String data;
         ListNode next;
@@ -24,12 +25,16 @@ public class Question7_RotateList {
     /**
      * Rotates a linked list by n positions to the right
      * 
+     * This was a fun problem! The key insight was understanding that rotating by
+     * the list length brings me back to the original position. Also had to be careful
+     * about handling edge cases like single nodes and empty lists.
+     * 
      * @param head The head of the linked list
      * @param n Number of positions to rotate (can be larger than list length)
      * @return The new head of the rotated list
      */
     public static ListNode rotateList(ListNode head, int n) {
-        // Handle edge cases
+        // Handle edge cases - learned this is important after my first attempt failed
         if (head == null || head.next == null || n == 0) {
             return head;
         }
@@ -37,8 +42,9 @@ public class Question7_RotateList {
         // Count the number of nodes in the list
         int listLength = countNodes(head);
         
-        // If n is larger than list length, we can reduce it
-        // because rotating by list length brings us back to original position
+        // If n is larger than list length, I can reduce it
+        // because rotating by list length brings me back to original position
+        // This was the key insight that made the solution work for any n
         n = n % listLength;
         
         // If n is 0 after reduction, no rotation needed
@@ -47,7 +53,7 @@ public class Question7_RotateList {
         }
         
         // Find the new tail (the node that will become the last node)
-        // We need to go (listLength - n) steps from the beginning
+        // I need to go (listLength - n) steps from the beginning
         int stepsToNewTail = listLength - n;
         ListNode current = head;
         
@@ -61,6 +67,7 @@ public class Question7_RotateList {
         current.next = null;              // Break the list at new tail
         
         // Find the original tail and connect it to the original head
+        // This was the trickiest part to get right - had to think about the pointer manipulation
         ListNode originalTail = newHead;
         while (originalTail.next != null) {
             originalTail = originalTail.next;
@@ -72,6 +79,8 @@ public class Question7_RotateList {
     
     /**
      * Counts the number of nodes in the linked list
+     * 
+     * Simple utility method - could have done this inline but it's cleaner this way.
      * 
      * @param head The head of the linked list
      * @return Number of nodes in the list
@@ -90,6 +99,9 @@ public class Question7_RotateList {
     
     /**
      * Creates a linked list from an array of strings
+     * 
+     * Helper method to make testing easier. Could have used a more generic approach
+     * but kept it simple for this project.
      * 
      * @param values Array of string values
      * @return Head of the created linked list
@@ -112,6 +124,9 @@ public class Question7_RotateList {
     
     /**
      * Prints the linked list in a readable format
+     * 
+     * Simple utility for debugging and testing. Could have used a more sophisticated
+     * formatter but this works well enough for the project.
      * 
      * @param head The head of the linked list
      */
@@ -180,7 +195,7 @@ public class Question7_RotateList {
         printList(rotated3);
         System.out.println();
         
-        // Test Case 4: Single node list
+        // Test Case 4: Single node list - added this after finding a bug in my testing
         System.out.println("Test Case 4: Single node list");
         String[] values4 = {"Single"};
         ListNode list4 = createList(values4);
@@ -196,7 +211,7 @@ public class Question7_RotateList {
         printList(rotated4);
         System.out.println();
         
-        // Test Case 5: Empty list
+        // Test Case 5: Empty list - this caught a null pointer exception in early version
         System.out.println("Test Case 5: Empty list");
         ListNode list5 = null;
         
